@@ -50,7 +50,7 @@
         color: #f8fafc;
         overflow-y: scroll;
         font-family: 'Rajdhani', sans-serif;
-        cursor: auto; /* Fallback */
+        cursor: auto; /* Default cursor */
       }
       h1, h2, h3, h4, h5, h6 {
         font-family: 'Orbitron', sans-serif;
@@ -115,7 +115,8 @@
       };
 
       const APP_NAME = "NEON ARCADE";
-      const REQUEST_GAME_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfD_placeholder_for_user_to_create_form/viewform";
+      // Updated URL
+      const REQUEST_GAME_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe_oEXrxiMd1hV1YGyWhiHH9FaQlJNp029RJxrabGMXvXTTiQ/viewform?usp=publish-editor";
       const PANIC_URL = "https://classroom.google.com";
 
       const GAMES_DATA = [
@@ -351,66 +352,7 @@
         `;
       };
 
-      const CursorEffect = () => {
-        const cursorRef = useRef(null);
-        const dotRef = useRef(null);
-
-        useEffect(() => {
-          const cursor = cursorRef.current;
-          const dot = dotRef.current;
-          
-          document.body.style.cursor = 'none';
-
-          const onMouseMove = (e) => {
-            if (cursor && dot) {
-              cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-              dot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-            }
-          };
-
-          const onMouseDown = () => {
-            if (cursor) cursor.style.transform += ' scale(0.8)';
-          };
-
-          const onMouseUp = () => {};
-          
-          const onMouseOver = (e) => {
-              if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.closest('button') || e.target.closest('.cursor-pointer')) {
-                  cursor?.classList.add('scale-150', 'bg-cyber-neon/20');
-              } else {
-                  cursor?.classList.remove('scale-150', 'bg-cyber-neon/20');
-              }
-          };
-
-          window.addEventListener('mousemove', onMouseMove);
-          window.addEventListener('mousedown', onMouseDown);
-          window.addEventListener('mouseup', onMouseUp);
-          document.addEventListener('mouseover', onMouseOver);
-
-          return () => {
-            window.removeEventListener('mousemove', onMouseMove);
-            window.removeEventListener('mousedown', onMouseDown);
-            window.removeEventListener('mouseup', onMouseUp);
-            document.removeEventListener('mouseover', onMouseOver);
-            document.body.style.cursor = 'auto';
-          };
-        }, []);
-
-        if (typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0) return null;
-
-        return html`
-          <div className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden">
-            <div 
-              ref=${cursorRef} 
-              className="absolute top-0 left-0 w-8 h-8 border-2 border-cyber-neon rounded-full -ml-4 -mt-4 transition-all duration-100 ease-out shadow-[0_0_15px_#00f3ff] mix-blend-screen"
-            ></div>
-            <div 
-              ref=${dotRef} 
-              className="absolute top-0 left-0 w-2 h-2 bg-cyber-pink rounded-full -ml-1 -mt-1 shadow-[0_0_10px_#ff0099]"
-            ></div>
-          </div>
-        `;
-      };
+      // CursorEffect REMOVED
 
       const GameCard = ({ game, onClick }) => {
         return html`
@@ -900,7 +842,8 @@
               <div className="text-center space-y-2 animate-float">
                 <h1 className="text-5xl md:text-7xl font-display font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyber-neon via-white to-cyber-purple drop-shadow-[0_0_15px_rgba(0,243,255,0.5)]">WELCOME USER</h1>
                 <div className="text-4xl md:text-6xl font-mono font-bold text-white tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] py-4">${time}</div>
-                <p className="text-cyber-slate font-mono text-sm md:text-base tracking-[0.3em] uppercase">// Select Protocol to Initialize</p>
+                <!-- Updated Bright Text -->
+                <p className="text-cyber-neon font-mono text-sm md:text-base tracking-[0.3em] uppercase drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]">// Select Protocol to Initialize</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mt-8">
@@ -938,7 +881,8 @@
             </main>
 
             <footer className="relative z-10 bg-black border-t-2 border-white py-3 overflow-hidden shadow-[0_-5px_20px_rgba(255,255,255,0.1)]">
-              <div className="whitespace-nowrap animate-[marquee_20s_linear_infinite] font-mono text-sm font-bold text-white tracking-widest drop-shadow-[0_0_5px_white]">
+              <!-- Updated Bigger Marquee -->
+              <div className="whitespace-nowrap animate-[marquee_20s_linear_infinite] font-mono text-2xl font-bold text-white tracking-widest drop-shadow-[0_0_5px_white] py-2">
                 <span className="mx-8">/// SYSTEM UPDATE V2.4: SECURITY PATCHES APPLIED</span><span className="mx-8">/// NEW GAMES ADDED TO DATABASE</span><span className="mx-8">/// DO NOT FORGET TO HYDRATE</span><span className="mx-8">/// REPORT BUGS TO ADMIN</span><span className="mx-8">/// ENJOY YOUR SESSION</span><span className="mx-8">/// SYSTEM STATUS: OPTIMAL</span>
               </div>
             </footer>
@@ -1052,7 +996,7 @@
           const PanicIcon = html`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 animate-pulse"><path fillRule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" /></svg>`;
           return html`
             <div className="min-h-screen bg-cyber-black text-slate-200 flex flex-col font-sans animate-fade-in cursor-auto">
-              <${CursorEffect} />
+              
               <header className="h-16 border-b border-cyber-slate bg-cyber-black sticky top-0 z-50 px-4 flex items-center justify-between shadow-neon-pink/20">
                  <div className="flex items-center gap-2 cursor-pointer hover:text-cyber-neon transition-colors" onClick=${() => { setActiveGame(null); setView('HOME'); }}><span className="text-xl">←</span><span className="font-display font-bold tracking-widest hidden sm:inline">EXIT SIMULATION</span></div>
                  <div className="flex items-center gap-4"><${Clock} /><${Button} onClick=${handlePanic} variant="danger" size="md" icon=${PanicIcon} className="shadow-[0_0_15px_rgba(255,0,0,0.7)] hover:shadow-[0_0_25px_rgba(255,0,0,1)] font-bold tracking-widest border border-white/20">PANIC</${Button}></div>
@@ -1063,7 +1007,7 @@
         }
 
         if (view === 'HOME') {
-          return html`<div><${CursorEffect} />${showWelcome && html`<${WelcomeModal} onClose=${handleCloseWelcome} />`}<${HomeMenu} onEnterLibrary=${() => setView('LIBRARY')} onQuickPlay=${handleQuickPlay} featuredGame=${featuredGame} onPanic=${handlePanic} /></div>`;
+          return html`<div>${showWelcome && html`<${WelcomeModal} onClose=${handleCloseWelcome} />`}<${HomeMenu} onEnterLibrary=${() => setView('LIBRARY')} onQuickPlay=${handleQuickPlay} featuredGame=${featuredGame} onPanic=${handlePanic} /></div>`;
         }
 
         const SidebarItem = ({ category, label, icon }) => {
@@ -1075,7 +1019,7 @@
 
         return html`
           <div className="min-h-screen bg-[#050b14] text-slate-200 font-sans flex overflow-hidden animate-fade-in">
-            <${CursorEffect} />
+            
             ${showWelcome && html`<${WelcomeModal} onClose=${handleCloseWelcome} />`}
             <aside className=${`fixed inset-y-0 left-0 z-40 w-64 bg-[#0a0f1e] border-r border-cyber-slate/50 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}>
               <div className="h-20 flex items-center px-6 border-b border-cyber-slate/50 cursor-pointer" onClick=${() => setView('HOME')}><div className="w-8 h-8 bg-cyber-neon text-cyber-black flex items-center justify-center font-bold font-display text-xl mr-3 shadow-neon">N</div><h1 className="font-display font-bold text-xl tracking-wider text-white italic">NEON</h1></div>
