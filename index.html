@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ArcadeUnblocked - Cyberpunk Edition</title>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -26,11 +26,13 @@
                 pink: '#ff0099', // Neon Pink
                 purple: '#bd00ff',
                 yellow: '#facc15', // Caution Yellow
+                green: '#22c55e', // New Game Green
               }
             },
             boxShadow: {
               'neon': '0 0 5px theme("colors.cyber.neon"), 0 0 10px theme("colors.cyber.neon")',
               'neon-pink': '0 0 5px theme("colors.cyber.pink"), 0 0 10px theme("colors.cyber.pink")',
+              'neon-green': '0 0 5px theme("colors.cyber.green"), 0 0 10px theme("colors.cyber.green")',
             },
             animation: {
               'fade-in': 'fadeIn 0.3s ease-in-out',
@@ -118,6 +120,7 @@
       const GameCategory = {
         ALL: 'All Games',
         HOT: 'Trending',
+        NEW: 'New Arrivals',
         RHYTHM: 'Rhythm & Music',
         PHYSICS: 'Physics Chaos',
         PLATFORMER: 'Precision Platformer',
@@ -140,6 +143,18 @@
       const PANIC_URL = "https://classroom.google.com";
 
       const GAMES_DATA = [
+        {
+          id: 'smash-karts',
+          title: 'Smash Karts',
+          description: 'Our newest game! Drive fast, fire rockets, and smash your opponents in this chaotic multiplayer kart battler.',
+          url: 'https://smashkartsio.com/1.embed',
+          thumbnail: 'https://i.ibb.co/5X7mL5L6/smashkarts-io.jpg', // THUMBNAIL UPDATED
+          category: GameCategory.MULTIPLAYER,
+          type: GameType.IFRAME,
+          isNew: true, // NEW GAME
+          isHot: true,
+          popularity: 100 
+        },
         {
           id: 'magic-tiles-3',
           title: 'Magic Tiles 3',
@@ -437,7 +452,13 @@
                 ${game.category.toUpperCase()}
               </span>
               
-              ${game.isHot && !game.maintenance && html`
+              ${game.isNew && !game.maintenance && html`
+                <span className="absolute top-2 left-2 px-2 py-0.5 text-xs font-bold bg-green-500 text-white shadow-neon-green animate-pulse-fast z-20">
+                  NEW
+                </span>
+              `}
+              
+              ${game.isHot && !game.isNew && !game.maintenance && html`
                 <span className="absolute top-2 left-2 px-2 py-0.5 text-xs font-bold bg-cyber-pink text-white shadow-neon-pink animate-pulse-fast z-20">
                   HOT
                 </span>
@@ -688,8 +709,8 @@
 
         const dateStr = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}/${date.getFullYear()}`;
 
-        // Generate a random version for the marquee
-        const version = `V3.${Math.floor(Math.random() * 9)}.${Math.floor(Math.random() * 99)}`;
+        // Static Version for manual updates
+        const version = "v4.0.1 (MINOR)"; 
 
         return html`
           <div className="relative min-h-screen bg-[#050b14] overflow-hidden flex flex-col font-sans animate-fade-in text-white selection:bg-cyber-neon selection:text-black">
@@ -754,8 +775,8 @@
             <footer className="relative z-10 bg-black border-t-2 border-white py-4 overflow-hidden shadow-[0_-5px_20px_rgba(255,255,255,0.1)]">
               <!-- Updated BIGGER Marquee with dynamic text -->
               <div className="whitespace-nowrap animate-[marquee_25s_linear_infinite] font-mono text-4xl font-black text-white tracking-widest drop-shadow-[0_0_10px_white] py-2 flex items-center">
-                <span className="text-cyber-neon mx-12">/// SYSTEM UPDATE ${version}</span>
-                <span className="mx-12">RECENT CHANGES: CATEGORIES EXPANDED, TRENDING ALGORITHM ONLINE</span>
+                <span className="text-cyber-neon mx-12">/// SYSTEM UPDATE ${version}: VISUAL PATCH APPLIED</span>
+                <span className="mx-12">NEW GAME DETECTED: SMASH KARTS</span>
                 <span className="text-cyber-pink mx-12">/// ALERT: MAGIC TILES 3 UNDER MAINTENANCE</span>
                 <span className="mx-12">/// WEEKLY TOP 3 LEADERBOARD ACTIVE</span>
                 <span className="mx-12">/// 2026 COPYRIGHT NEON ARCADE</span>
@@ -891,7 +912,7 @@
         const filteredGames = useMemo(() => {
           return GAMES_DATA.filter(game => {
             const matchesSearch = game.title.toLowerCase().includes(filter.search.toLowerCase());
-            const matchesCategory = filter.category === GameCategory.ALL || (filter.category === GameCategory.HOT && game.isHot) || game.category === filter.category;
+            const matchesCategory = filter.category === GameCategory.ALL || (filter.category === GameCategory.HOT && game.isHot) || (filter.category === GameCategory.NEW && game.isNew) || game.category === filter.category;
             return matchesSearch && matchesCategory;
           });
         }, [filter]);
@@ -993,7 +1014,7 @@
               <nav className="p-4 space-y-1 overflow-y-auto h-[calc(100vh-80px)]">
                 <button onClick=${() => setView('HOME')} className="w-full text-left px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all border-l-2 border-transparent text-slate-400 hover:text-white hover:bg-white/5 flex items-center gap-3 mb-4"><span>🏠</span>BASE / HOME</button>
                 <div className="text-xs font-mono text-slate-600 mb-2 px-4 mt-2">DISCOVER</div>
-                <${SidebarItem} category=${GameCategory.ALL} label="All Games" icon="👾" /><${SidebarItem} category=${GameCategory.HOT} label="Trending" icon="🔥" />
+                <${SidebarItem} category=${GameCategory.ALL} label="All Games" icon="👾" /><${SidebarItem} category=${GameCategory.NEW} label="New Arrivals" icon="✨" /><${SidebarItem} category=${GameCategory.HOT} label="Trending" icon="🔥" />
                 <div className="text-xs font-mono text-slate-600 mb-2 px-4 mt-6">GENRES</div>
                 <${SidebarItem} category=${GameCategory.ACTION} label="Action" icon="⚔️" /><${SidebarItem} category=${GameCategory.RACING} label="Racing" icon="🏎️" /><${SidebarItem} category=${GameCategory.SPORTS} label="Sports" icon="🏀" /><${SidebarItem} category=${GameCategory.STRATEGY} label="Strategy" icon="🧠" /><${SidebarItem} category=${GameCategory.PUZZLE} label="Puzzle" icon="🧩" />
                 <${SidebarItem} category=${GameCategory.RHYTHM} label="Rhythm" icon="🎵" /><${SidebarItem} category=${GameCategory.PHYSICS} label="Physics" icon="⚛️" /><${SidebarItem} category=${GameCategory.PLATFORMER} label="Platformer" icon="🏃" />
